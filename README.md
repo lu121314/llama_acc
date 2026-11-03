@@ -1,11 +1,11 @@
-# llama32_acc 精简工程（含PYNQ，不含权重）
+# llama32_acc 精简工程（含PYNQ）
 
 Llama-3.2-3B-Instruct / ZU7CG / 双核PS+PL DDR / 8192 token / 250 MHz。
 
 ```text
 llama32_acc/
 ├── README.md
-├── 权重下载地址.txt       已填写8192权重网盘地址及提取码
+├── 权重下载地址.txt        已填写8192权重网盘地址及提取码
 ├── src/                   已生成RTL、IP、约束、必要配置/构建脚本
 ├── build/                 build.sh、variant.json
 ├── board/
@@ -18,7 +18,9 @@ llama32_acc/
 │       ├── notebooks/     Jupyter入口
 │       ├── test/          带日志的诊断入口
 │       └── run.sh         prompt/chat/ui运行入口
-└── SHA256SUMS
+├── data/                  权重网盘链接
+├── skill/                 PYNQ编译skill
+└── report/                提示词
 ```
 
 ## 板卡运行
@@ -45,6 +47,4 @@ bash build/build.sh --stage impl --jobs 1
 
 直接使用现有RTL，产物写入 `build/work/llama32_3b_ctx8192_250mhz/`。配套硬件只存放一份，准确路径见 `build/variant.json`；新基础构建需独立检查时序，不能直接继承原候选的时序验收。
 
-不包含模型镜像/原始权重、DCP、历史报告/日志、仿真资料、硬件生成语言源码、开发测试和离线wheel大包。保留requirements供已有PYNQ环境使用。下载地址TXT允许用户编辑，不计入SHA256SUMS；其他随包文件均有校验清单。
-
-原完整版、硬件与远端工程保持不变。此更新仅整理PYNQ运行文件，没有修改RTL/IP/约束、驱动/推理/UI逻辑，没有启动真实Vivado构建或板测。
+保留requirements供已有PYNQ环境使用。
