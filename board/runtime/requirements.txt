@@ -1,0 +1,2 @@
+transformers>=4.45
+# PYNQ 4.0.x is provided by the board image.

@@ -1,0 +1,198 @@
+// Generator : SpinalHDL v1.10.2a    git head : a348a60b7e8b6a455c72e1536ec3d74a2ea16935
+// Component : DataPath_xN
+
+`timescale 1ns/1ps
+
+module StreamFifoCtrl_7 (
+  input  wire          io_push_valid,
+  output wire          io_push_ready,
+  input  wire [511:0]  io_push_payload,
+  output wire          io_pop_valid,
+  input  wire          io_pop_ready,
+  output wire [511:0]  io_pop_payload,
+  input  wire          io_flush,
+  output wire [5:0]    io_occupancy,
+  output wire [5:0]    io_availability,
+  output wire          rdPort_cmd_valid,
+  output wire [4:0]    rdPort_cmd_payload,
+  input  wire [511:0]  rdPort_rsp,
+  output wire          wrPort_valid,
+  output wire [4:0]    wrPort_payload_address,
+  output wire [511:0]  wrPort_payload_data,
+  input  wire          clk_0_clk,
+  input  wire          clk_0_resetn
+);
+
+  wire                logic_ptr_doPush;
+  wire                logic_ptr_doPop;
+  wire                logic_ptr_full;
+  wire                logic_ptr_empty;
+  (* max_fanout = 100 *) reg        [5:0]    logic_ptr_push;
+  (* max_fanout = 100 *) reg        [5:0]    logic_ptr_pop;
+  wire       [5:0]    logic_ptr_occupancy;
+  wire       [5:0]    logic_ptr_popOnIo;
+  reg                 logic_ptr_wentUp;
+  wire                logic_ptr_arb_fmax_emptyTracker_incr;
+  wire                logic_ptr_arb_fmax_emptyTracker_decr;
+  reg        [5:0]    logic_ptr_arb_fmax_emptyTracker_value;
+  (* keep , syn_keep *) wire       [5:0]    logic_ptr_arb_fmax_emptyTracker_plusOne /* synthesis syn_keep = 1 */ ;
+  (* keep , syn_keep *) wire       [5:0]    logic_ptr_arb_fmax_emptyTracker_minusOne /* synthesis syn_keep = 1 */ ;
+  wire                logic_ptr_arb_fmax_fullTracker_incr;
+  wire                logic_ptr_arb_fmax_fullTracker_decr;
+  reg        [5:0]    logic_ptr_arb_fmax_fullTracker_value;
+  (* keep , syn_keep *) wire       [5:0]    logic_ptr_arb_fmax_fullTracker_plusOne /* synthesis syn_keep = 1 */ ;
+  (* keep , syn_keep *) wire       [5:0]    logic_ptr_arb_fmax_fullTracker_minusOne /* synthesis syn_keep = 1 */ ;
+  wire                io_push_fire;
+  wire                io_pop_fire;
+  wire                logic_ptr_fmax_incr;
+  wire                logic_ptr_fmax_decr;
+  reg        [5:0]    logic_ptr_fmax_value;
+  (* keep , syn_keep *) wire       [5:0]    logic_ptr_fmax_plusOne /* synthesis syn_keep = 1 */ ;
+  (* keep , syn_keep *) wire       [5:0]    logic_ptr_fmax_minusOne /* synthesis syn_keep = 1 */ ;
+  wire                logic_pop_addressGen_valid;
+  reg                 logic_pop_addressGen_ready;
+  wire       [4:0]    logic_pop_addressGen_payload;
+  wire                logic_pop_addressGen_fire;
+  wire                logic_pop_sync_readArbitation_valid;
+  wire                logic_pop_sync_readArbitation_ready;
+  wire       [4:0]    logic_pop_sync_readArbitation_payload;
+  reg                 logic_pop_addressGen_rValid;
+  reg        [4:0]    logic_pop_addressGen_rData;
+  wire                logic_pop_sync_readArbitation_translated_valid;
+  wire                logic_pop_sync_readArbitation_translated_ready;
+  wire       [511:0]  logic_pop_sync_readArbitation_translated_payload;
+  wire                logic_pop_sync_readArbitation_fire;
+  reg        [5:0]    logic_pop_sync_popReg;
+  wire                logic_fmaxAvail_incr;
+  wire                logic_fmaxAvail_decr;
+  reg        [5:0]    logic_fmaxAvail_value;
+  (* keep , syn_keep *) wire       [5:0]    logic_fmaxAvail_plusOne /* synthesis syn_keep = 1 */ ;
+  (* keep , syn_keep *) wire       [5:0]    logic_fmaxAvail_minusOne /* synthesis syn_keep = 1 */ ;
+
+  assign logic_ptr_arb_fmax_emptyTracker_plusOne = (logic_ptr_arb_fmax_emptyTracker_value + 6'h01);
+  assign logic_ptr_arb_fmax_emptyTracker_minusOne = (logic_ptr_arb_fmax_emptyTracker_value - 6'h01);
+  assign logic_ptr_arb_fmax_emptyTracker_incr = logic_ptr_doPop;
+  assign logic_ptr_arb_fmax_emptyTracker_decr = logic_ptr_doPush;
+  assign logic_ptr_empty = logic_ptr_arb_fmax_emptyTracker_value[5];
+  assign logic_ptr_arb_fmax_fullTracker_plusOne = (logic_ptr_arb_fmax_fullTracker_value + 6'h01);
+  assign logic_ptr_arb_fmax_fullTracker_minusOne = (logic_ptr_arb_fmax_fullTracker_value - 6'h01);
+  assign io_push_fire = (io_push_valid && io_push_ready);
+  assign logic_ptr_arb_fmax_fullTracker_incr = io_push_fire;
+  assign io_pop_fire = (io_pop_valid && io_pop_ready);
+  assign logic_ptr_arb_fmax_fullTracker_decr = io_pop_fire;
+  assign logic_ptr_full = logic_ptr_arb_fmax_fullTracker_value[5];
+  assign logic_ptr_fmax_plusOne = (logic_ptr_fmax_value + 6'h01);
+  assign logic_ptr_fmax_minusOne = (logic_ptr_fmax_value - 6'h01);
+  assign logic_ptr_fmax_incr = io_push_fire;
+  assign logic_ptr_fmax_decr = io_pop_fire;
+  assign logic_ptr_occupancy = logic_ptr_fmax_value;
+  assign io_push_ready = (! logic_ptr_full);
+  assign logic_ptr_doPush = io_push_fire;
+  assign wrPort_valid = io_push_fire;
+  assign wrPort_payload_address = logic_ptr_push[4:0];
+  assign wrPort_payload_data = io_push_payload;
+  assign logic_pop_addressGen_valid = (! logic_ptr_empty);
+  assign logic_pop_addressGen_payload = logic_ptr_pop[4:0];
+  assign logic_pop_addressGen_fire = (logic_pop_addressGen_valid && logic_pop_addressGen_ready);
+  assign logic_ptr_doPop = logic_pop_addressGen_fire;
+  always @(*) begin
+    logic_pop_addressGen_ready = logic_pop_sync_readArbitation_ready;
+    if((! logic_pop_sync_readArbitation_valid)) begin
+      logic_pop_addressGen_ready = 1'b1;
+    end
+  end
+
+  assign logic_pop_sync_readArbitation_valid = logic_pop_addressGen_rValid;
+  assign logic_pop_sync_readArbitation_payload = logic_pop_addressGen_rData;
+  assign rdPort_cmd_valid = logic_pop_addressGen_fire;
+  assign rdPort_cmd_payload = logic_pop_addressGen_payload;
+  assign logic_pop_sync_readArbitation_translated_valid = logic_pop_sync_readArbitation_valid;
+  assign logic_pop_sync_readArbitation_ready = logic_pop_sync_readArbitation_translated_ready;
+  assign logic_pop_sync_readArbitation_translated_payload = rdPort_rsp;
+  assign io_pop_valid = logic_pop_sync_readArbitation_translated_valid;
+  assign logic_pop_sync_readArbitation_translated_ready = io_pop_ready;
+  assign io_pop_payload = logic_pop_sync_readArbitation_translated_payload;
+  assign logic_pop_sync_readArbitation_fire = (logic_pop_sync_readArbitation_valid && logic_pop_sync_readArbitation_ready);
+  assign logic_ptr_popOnIo = logic_pop_sync_popReg;
+  assign io_occupancy = logic_ptr_occupancy;
+  assign logic_fmaxAvail_plusOne = (logic_fmaxAvail_value + 6'h01);
+  assign logic_fmaxAvail_minusOne = (logic_fmaxAvail_value - 6'h01);
+  assign logic_fmaxAvail_incr = io_pop_fire;
+  assign logic_fmaxAvail_decr = io_push_fire;
+  assign io_availability = logic_fmaxAvail_value;
+  always @(posedge clk_0_clk or negedge clk_0_resetn) begin
+    if(!clk_0_resetn) begin
+      logic_ptr_push <= 6'h0;
+      logic_ptr_pop <= 6'h0;
+      logic_ptr_wentUp <= 1'b0;
+      logic_ptr_arb_fmax_emptyTracker_value <= 6'h20;
+      logic_ptr_arb_fmax_fullTracker_value <= 6'h0;
+      logic_ptr_fmax_value <= 6'h0;
+      logic_pop_addressGen_rValid <= 1'b0;
+      logic_pop_sync_popReg <= 6'h0;
+      logic_fmaxAvail_value <= 6'h20;
+    end else begin
+      if((logic_ptr_doPush != logic_ptr_doPop)) begin
+        logic_ptr_wentUp <= logic_ptr_doPush;
+      end
+      if(io_flush) begin
+        logic_ptr_wentUp <= 1'b0;
+      end
+      if((logic_ptr_arb_fmax_emptyTracker_incr != logic_ptr_arb_fmax_emptyTracker_decr)) begin
+        logic_ptr_arb_fmax_emptyTracker_value <= (logic_ptr_arb_fmax_emptyTracker_incr ? logic_ptr_arb_fmax_emptyTracker_plusOne : logic_ptr_arb_fmax_emptyTracker_minusOne);
+      end
+      if(io_flush) begin
+        logic_ptr_arb_fmax_emptyTracker_value <= 6'h20;
+      end
+      if((logic_ptr_arb_fmax_fullTracker_incr != logic_ptr_arb_fmax_fullTracker_decr)) begin
+        logic_ptr_arb_fmax_fullTracker_value <= (logic_ptr_arb_fmax_fullTracker_incr ? logic_ptr_arb_fmax_fullTracker_plusOne : logic_ptr_arb_fmax_fullTracker_minusOne);
+      end
+      if(io_flush) begin
+        logic_ptr_arb_fmax_fullTracker_value <= 6'h0;
+      end
+      if(logic_ptr_doPush) begin
+        logic_ptr_push <= (logic_ptr_push + 6'h01);
+      end
+      if(logic_ptr_doPop) begin
+        logic_ptr_pop <= (logic_ptr_pop + 6'h01);
+      end
+      if(io_flush) begin
+        logic_ptr_push <= 6'h0;
+        logic_ptr_pop <= 6'h0;
+      end
+      if((logic_ptr_fmax_incr != logic_ptr_fmax_decr)) begin
+        logic_ptr_fmax_value <= (logic_ptr_fmax_incr ? logic_ptr_fmax_plusOne : logic_ptr_fmax_minusOne);
+      end
+      if(io_flush) begin
+        logic_ptr_fmax_value <= 6'h0;
+      end
+      if(logic_pop_addressGen_ready) begin
+        logic_pop_addressGen_rValid <= logic_pop_addressGen_valid;
+      end
+      if(io_flush) begin
+        logic_pop_addressGen_rValid <= 1'b0;
+      end
+      if(logic_pop_sync_readArbitation_fire) begin
+        logic_pop_sync_popReg <= logic_ptr_pop;
+      end
+      if(io_flush) begin
+        logic_pop_sync_popReg <= 6'h0;
+      end
+      if((logic_fmaxAvail_incr != logic_fmaxAvail_decr)) begin
+        logic_fmaxAvail_value <= (logic_fmaxAvail_incr ? logic_fmaxAvail_plusOne : logic_fmaxAvail_minusOne);
+      end
+      if(io_flush) begin
+        logic_fmaxAvail_value <= 6'h20;
+      end
+    end
+  end
+
+  always @(posedge clk_0_clk) begin
+    if(logic_pop_addressGen_ready) begin
+      logic_pop_addressGen_rData <= logic_pop_addressGen_payload;
+    end
+  end
+
+
+endmodule
+

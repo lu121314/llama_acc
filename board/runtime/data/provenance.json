@@ -1,0 +1,24 @@
+{
+  "project": "llama32_3b_ctx8192_250mhz",
+  "context": 8192,
+  "repacked_from": "Version1/pynq/llama32_3b_zu7cg_pynq_v1/data/model_manifest.json",
+  "immutable_weight_bytes_preserved": true,
+  "original_model_provenance": {
+    "source": "/mnt/data/llama_FPGA/python_prj/parameters/Llama-3.2-3B-Instruct",
+    "model": "Llama-3.2-3B-Instruct",
+    "tokenizer_files": [
+      {
+        "name": "tokenizer.json",
+        "sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4"
+      },
+      {
+        "name": "tokenizer_config.json",
+        "sha256": "9823dcfdc1121869029da45192238e85cf44f0b232a6d9dc20e4fe6f4242a14e"
+      },
+      {
+        "name": "special_tokens_map.json",
+        "sha256": "6f38c73729248f6c127296386e3cdde96e254636cc58b4169d3fd32328d9a8ec"
+      }
+    ]
+  }
+}

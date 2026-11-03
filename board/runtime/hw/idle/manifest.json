@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "part": "xczu7cg-ffvc1156-1-e",
+  "purpose": "Remove the accelerator by full reconfiguration to an independent idle image",
+  "external_ports": 0,
+  "accelerator_present": false,
+  "fabric_unconfigured": false,
+  "sha256": "11086b1f092f0477a9a55a47ebea5b8b54332b844b36ae4471e24f95b2600a86",
+  "bytes": 19311220,
+  "bit_header": {
+    "design": "pl_idle;UserID=0XFFFFFFFF;Version=2025.2;SW_CRC=533b86e1",
+    "part": "xczu7cg-ffvc1156-1-e",
+    "date": "2026/11/01",
+    "time": "13:32:47",
+    "payload_bytes": 19311092
+  },
+  "source": "Version1/tools/pl_idle/pl_idle.v",
+  "build_script": "Version1/tools/pl_idle/build.tcl",
+  "vivado_version": "2025.2",
+  "drc": {
+    "errors": 0,
+    "warnings": [
+      "RTSTAT-10: No routable loads (no external ports or active datapath)"
+    ]
+  },
+  "board_tested": false
+}

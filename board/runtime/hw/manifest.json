@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "profile": "pynq",
+  "part": "xczu7cg-ffvc1156-1-e",
+  "timing_verified": false,
+  "project_name": "llama32_3b_ctx8192_250mhz",
+  "context_tokens": 8192,
+  "layout_id": 859977803,
+  "inference_supported": true,
+  "mode": "inference",
+  "bit_header": {
+    "design": "llama_system_wrapper;UserID=0XFFFFFFFF;Version=2025.2;SW_CRC=55528f2d",
+    "part": "xczu7cg-ffvc1156-1-e",
+    "date": "2026/11/01",
+    "time": "17:28:48",
+    "payload_bytes": 19311092
+  },
+  "hardware": {
+    "profile": "pynq",
+    "accelerator": "DataPath_Pynq",
+    "control_base": 21474836480,
+    "pl_base": 17179869184,
+    "pl_size": 4294967296,
+    "ps_ddr_base": 34359738368,
+    "ps_ddr_size": 2147483648,
+    "clock_hz": 250000000,
+    "vivado_version": "2025.2"
+  },
+  "source": {
+    "kind": "standalone_checkpoint",
+    "project": "/home/asus/prj/llama32_3b_ctx8192_250mhz_20261101_104746/Version1/vivado_prj/local_rebuild_20261031/llama32_3b_ctx8192_250mhz",
+    "base_impl": "impl_2",
+    "base_checkpoint": "/home/asus/prj/llama32_3b_ctx8192_250mhz_20261101_104746/Version1/vivado_prj/local_rebuild_20261031/llama32_3b_ctx8192_250mhz/llama32_3b_ctx8192_250mhz.runs/impl_2/llama_system_wrapper_opt.dcp",
+    "base_checkpoint_sha256": "fb9f8db9eeb2ffe33a0b031af5d069e0b8ce43212064899b67170afd4cc1c7d5",
+    "marker_sha256": "c16faadf2a7c8bdf48278a1cb813df7640a7c25780c1267dbe61af39953f44d6",
+    "candidate_dir": "/home/asus/prj/llama32_3b_ctx8192_250mhz_20261101_104746/Version1/vivado_prj/local_rebuild_20261031/llama32_3b_ctx8192_250mhz/candidates/incremental_1k_250_reference",
+    "checkpoint": "/home/asus/prj/llama32_3b_ctx8192_250mhz_20261101_104746/Version1/vivado_prj/local_rebuild_20261031/llama32_3b_ctx8192_250mhz/candidates/incremental_1k_250_reference/candidate.dcp",
+    "checkpoint_sha256": "36b3933236dc154141ebd60049e6df1612342eb97a67fa526b69a4fe97f9e991",
+    "candidate_marker_sha256": "51e000e4c0e5980e0c8c62b52e556d2bce26432d0814bc1034dbbf84aed1b464",
+    "bit_marker_sha256": "73e4bd2bd105dd97b55554534beb85e33fa5b838c39a7940c112188af617189f",
+    "bitfile": "/home/asus/prj/llama32_3b_ctx8192_250mhz_20261101_104746/Version1/vivado_prj/local_rebuild_20261031/llama32_3b_ctx8192_250mhz/candidates/incremental_1k_250_reference/bitstream_from_accepted_dcp/llama32_3b_ctx8192_250mhz.bit",
+    "checkpoint_hwh_sha256": "80b47ff7b51d054a2d99bd34a2941c3a8ff5a7d864323825ff7cfd16d99af818",
+    "design_properties_sha256": "ed948911870d053fbb16784341b707adf35d4ee8af6362d9d7eeed451f919082",
+    "BITSTREAM.CONFIG.DCIUPDATEMODE": ""
+  },
+  "timing_evidence": {
+    "report_sha256": {
+      "timing_summary.rpt": "528439fe023a22fac2e3aeb0c1840b1508a3bf14fca1c2eadc174288d763c83e",
+      "route_status.rpt": "b4da105cdc8720897567d869dcad9303d715621093f0f17ac7827b2fc285f844",
+      "bus_skew.rpt": "6c25ea5abcfb212dec7631931bbbde7635c0019ff96051540852295a0883f7ec",
+      "drc.rpt": "58c68ce9ef8150c7c154850a4971742fd79de92460b43272d9ce9a89a30b8cc9",
+      "cdc.rpt": "cb2b0a8ecbcdd14ef8d411452497264b68b213133fe3dec5f6d077507ba38f31",
+      "check_timing.rpt": "1b5a15e7fce1dc5a44c7d48974b1be5078c842c93f803c05652c267c36cf7c54",
+      "utilization.rpt": "1ddb388ffed574bf75108991b3eda087828061f29b3cf609ed07d8b188a4890e",
+      "congestion.rpt": "e7b894e768756c4fdd203eb47a612c2dd21a6ea4a71053c09242a66fc0152cc4"
+    },
+    "acceptance": "Independent timing/CDC/boundary review is recorded separately; this exporter asserts file provenance only."
+  },
+  "files": {
+    "bit": {
+      "name": "llama32_3b_ctx8192_250mhz.bit",
+      "bytes": 19311233,
+      "sha256": "9837d9ef405e7cb821a542b9afeff04594cae467d0c1cf9f830cee24b4a769ed"
+    },
+    "hwh": {
+      "name": "llama32_3b_ctx8192_250mhz.hwh",
+      "bytes": 505295,
+      "sha256": "80b47ff7b51d054a2d99bd34a2941c3a8ff5a7d864323825ff7cfd16d99af818"
+    }
+  }
+}

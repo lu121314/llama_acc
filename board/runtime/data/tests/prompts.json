@@ -1,0 +1,117 @@
+{
+  "schema": "llama32.output.test_scenarios.v1",
+  "status": "TEST_PLAN_NOT_EXECUTION_RESULTS",
+  "text_encoding": "UTF-8",
+  "golden_outputs": null,
+  "golden_policy": {
+    "zh": "不预填完整模型 golden。普通文本只检查实际返回、可读性与请求关联；重复场景比较同次测试实际采集的 token。",
+    "en": "No full-model golden is invented. Record actual outputs, assess request relevance, and compare tokens captured within the same repeat test."
+  },
+  "scenarios": [
+    {
+      "id": "two_independent_prompts_zh_en",
+      "mode": "prompt",
+      "prompts": [
+        {
+          "language": "zh",
+          "text": "用中文简要解释 FPGA。"
+        },
+        {
+          "language": "en",
+          "text": "Explain the difference between an FPGA and a CPU."
+        }
+      ],
+      "max_new_tokens": 64,
+      "same_process": true,
+      "load_overlay_and_weights_once": true,
+      "soft_reset_before_each_request": true,
+      "carry_chat_history": false,
+      "expectation": {
+        "zh": "两次独立请求正常返回；第二次回答应关联 FPGA 与 CPU。不同提示词无需 token 相同。",
+        "en": "Both independent requests return; the second response addresses FPGA versus CPU. Different prompts are not expected to produce identical tokens."
+      }
+    },
+    {
+      "id": "same_prompt_repeat",
+      "mode": "prompt",
+      "prompt": "Explain what an FPGA is.",
+      "runs": 2,
+      "max_new_tokens": 16,
+      "same_process": true,
+      "load_overlay_and_weights_once": true,
+      "soft_reset_before_each_request": true,
+      "carry_chat_history": false,
+      "compare": "exact_output_token_ids_within_this_test",
+      "record": [
+        "input_token_ids",
+        "output_token_ids",
+        "first_different_output_position",
+        "registers_before_after",
+        "time_to_first_token_s",
+        "elapsed_s",
+        "decode_tokens_per_s",
+        "bit_hwh_model_sha256"
+      ],
+      "expectation": {
+        "zh": "相同输入、配置和贪心解码下，两轮实际输出逐 token 比较；若不同保留两轮结果，不覆盖第一轮日志。",
+        "en": "Compare the two actual outputs token by token with the same input, configuration and greedy decoding. Preserve both results if they diverge."
+      }
+    },
+    {
+      "id": "multilingual_chat",
+      "mode": "chat",
+      "system_prompt": "请使用用户提问所用的语言回答。 Answer in the language used by the user.",
+      "turns": [
+        "请简单介绍 FPGA。",
+        "Summarize your explanation in one English sentence."
+      ],
+      "max_new_tokens": 64,
+      "carry_chat_history": true,
+      "expectation": {
+        "zh": "记录多轮模板和实际输入 token 数；UTF-8 输入输出正常，不预设固定译文。",
+        "en": "Record the chat template and actual input token count; confirm UTF-8 input/output without assuming a fixed translation."
+      }
+    },
+    {
+      "id": "ctx8192_boundary_plan",
+      "applies_to_context_tokens": 8192,
+      "status": "NOT_RUN_ON_BOARD",
+      "counting_rule": "actual_prompt_token_ids + max_new_tokens - 1 <= context_tokens",
+      "counting_notes": {
+        "zh": "必须按 tokenizer/chat template 后的实际 token ID 数计数，包含系统提示和历史，不能用字符数替代。最后一个生成 token 无需作为下一输入回送。",
+        "en": "Count actual token IDs after tokenization/chat templating, including system and history. Character count is insufficient; the final generated token need not be resubmitted."
+      },
+      "cases": [
+        {
+          "prompt_token_count": 8191,
+          "max_new_tokens": 2,
+          "expected_input_budget": 8192,
+          "expected_admission": "accept",
+          "board_status": "unverified"
+        },
+        {
+          "prompt_token_count": 8192,
+          "max_new_tokens": 1,
+          "expected_input_budget": 8192,
+          "expected_admission": "accept",
+          "board_status": "unverified"
+        },
+        {
+          "prompt_token_count": 8192,
+          "max_new_tokens": 2,
+          "expected_input_budget": 8193,
+          "expected_admission": "reject_before_hardware_write",
+          "board_status": "unverified"
+        }
+      ],
+      "execution_notes": {
+        "zh": "先运行短文本与同进程重复，再逐步测试跨1024/4096位置及近8192边界。接受边界只说明调度预算合法；仍需记录真实板卡返回、超时、寄存器与输出，不把参数检查通过当作长上下文推理通过。1024项目跳过此场景。",
+        "en": "Run short text and repeat tests first, then cross 1024/4096 positions and approach 8192. Admission only proves a valid input budget; actual board output, timeouts and registers remain to be checked. Skip this scenario for 1024-context projects."
+      }
+    }
+  ],
+  "historical_bos_note": {
+    "zh": "BOS-only [128000] 的历史重复测试有失败证据，保留为独立诊断，不作为默认日常文本测试。",
+    "en": "Historical BOS-only [128000] repeat failures remain separate diagnostic evidence; this is not the default everyday text test."
+  }
+}

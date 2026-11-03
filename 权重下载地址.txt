@@ -1,0 +1,20 @@
+llama32_3b_ctx8192_250mhz 权重下载地址
+
+分享文件：llama32_8192_bin
+网盘地址：https://pan.baidu.com/s/1ElX1h7l4YqrDfEUCHoCoPQ?pwd=75t4
+提取码：75t4
+
+此分享用于8192上下文的187.5MHz和250MHz两个版本。
+
+硬件上下文：8192 tokens
+同一上下文的187.5MHz和250MHz版本使用相同的权重镜像。
+1024与8192上下文的镜像布局不同，请下载匹配的版本。
+
+下载并解压后，将以下两个文件放到本项目 board/runtime/data/：
+  core0.bin  2063458304 字节
+  SHA256: 47296305fde1bf7f5d5b18a04356fbebba56395b312bdce2a1cab904bfbd4929
+  core1.bin  2063458304 字节
+  SHA256: f659d157c5444e05a36f8206776c983780ca6edfb46cebb2290523e03c1653f2
+
+board/runtime/data/中已保留tokenizer、model_manifest.json及模型许可。
+本压缩包不包含core0.bin、core1.bin或原始safetensors权重。
